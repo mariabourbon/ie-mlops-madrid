@@ -41,7 +41,7 @@ The project is deployed on Render, which automatically builds and runs the Docke
 1. Create and activate a virtual environment
   python -m venv venv
 venv\Scripts\activate        # Windows
-# or
+or
 source venv/bin/activate     # macOS/Linux
 
 2.Install dependencies
