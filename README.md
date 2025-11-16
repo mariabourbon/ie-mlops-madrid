@@ -1,81 +1,73 @@
-# 🏠 Madrid House Price Prediction — MLOps Project
+Madrid House Price Prediction — MLOps Project
 
-An end-to-end MLOps system for predicting Madrid house prices.  
-It covers data preparation, model training (with MLflow tracking), Dockerized serving via FastAPI, and continuous deployment on Render.
+This project develops an end-to-end MLOps pipeline for predicting house prices in Madrid. It includes data preprocessing, model training and evaluation, API serving with FastAPI, containerization using Docker, and automated deployment through GitHub Actions and Render.
 
----
+Project Overview
+1. Data and Training
 
-## 🚀 Project Overview
-Pipeline Stages
+The pipeline processes a housing dataset and trains a RandomForestRegressor model. Model metrics and parameters are logged using MLflow for experiment tracking.
 
-Data & Training – Cleans and processes housing data, trains a RandomForestRegressor, logs metrics to MLflow.
+2. Model Serving
 
-Model Serving – A FastAPI app serves predictions using the trained model.
+A FastAPI application provides an HTTP interface for real-time price predictions based on property features.
 
-Containerization – The app and model are packaged in a Docker image.
+3. Containerization
 
-CI/CD Automation – GitHub Actions handle training, model artifact upload, and Docker builds.
+The serving application and trained model are packaged into a Docker image for portability and consistency.
 
-Deployment – The Docker image is automatically built and deployed to Render with a live endpoint.
+4. CI/CD Automation
 
----
+GitHub Actions workflows automate model training, artifact management, Docker image builds, and deployment.
 
-## 📂 Repository Structure
+5. Deployment
+
+The project is deployed on Render, which automatically builds and runs the Docker container when updates are pushed to the main branch.
+
+Repository Structure
 madrid_mlops_project/
 ├── app/
 │   └── app.py                  # FastAPI app for serving predictions
 ├── data/
-│   └── madrid_sample.csv       # Sample dataset for CI
+│   └── madrid_sample.csv       # Sample dataset for CI testing
 ├── models/
-│   └── model.pkl               # Trained model
+│   └── model.pkl               # Trained model artifact
 ├── src/
-│   ├── data_cleaning.py        # Data preprocessing
-│   └── train_model.py          # Model training + MLflow logging
+│   ├── data_cleaning.py        # Data preprocessing script
+│   └── train_model.py          # Model training and MLflow logging
 ├── .github/workflows/
-│   ├── train.yml               # Train workflow
-│   └── docker.yml              # Docker build workflow
+│   ├── train.yml               # Training workflow
+│   └── docker.yml              # Docker build and deploy workflow
 ├── Dockerfile                  # Container build instructions
-├── render.yaml                 # Render deployment manifest
-├── requirements-train-ci.txt   # Training dependencies for CI
-├── requirements-api.txt        # Runtime dependencies for FastAPI
+├── render.yaml                 # Render deployment configuration
+├── requirements-train-ci.txt   # Training dependencies (for CI)
+├── requirements-api.txt        # Runtime dependencies (for FastAPI)
 └── README.md                   # Project documentation
 
-⚙️ Local Setup
-1️⃣ Create and activate a virtual environment
-python -m venv venv
-venv\Scripts\activate      # Windows
+Local Setup
+1. Create and activate a virtual environment
+  python -m venv venv
+venv\Scripts\activate        # Windows
 # or
-source venv/bin/activate   # macOS/Linux
+source venv/bin/activate     # macOS/Linux
 
-2️⃣ Install dependencies
-
+2.Install dependencies
 For training:
-
 pip install -r requirements-train-ci.txt
-
-
 For serving:
-
 pip install -r requirements-api.txt
 
-3️⃣ Train the model locally
+3. Train the model locally
 python src/train_model.py data/house_price_madrid_14_08_2022.csv
+The trained model will be saved to models/model.pkl. MLflow logs will be available in the mlruns/ directory.
 
-
-Model is saved to models/model.pkl
-
-Metrics and parameters are logged in MLflow (mlruns/)
-
-4️⃣ Run the API locally
+4. Run the API locally
 uvicorn app.app:app --host 0.0.0.0 --port 8000
+Then open http://127.0.0.1:8000/docs to test the endpoints.
 
+Example Prediction
 
-Visit the docs at: http://127.0.0.1:8000/docs
-
-🧪 Example Prediction
-
-POST /predict
-
+Endpoint: POST /predict
+Request body:
 [
   {
     "m2": 85,
@@ -88,63 +80,47 @@ POST /predict
     "district": "centro"
   }
 ]
-
-Response
-
+Response:
 {
   "count": 1,
   "log_price": [11.05],
   "price": [63000.42]
 }
 
-🔁 CI/CD Workflows
-🧠 train.yml
+CI/CD Workflows
+train.yml
+- Runs on every push to the main branch
+- Installs lightweight dependencies
+- Trains on a sample dataset (data/madrid_sample.csv)
+- Uploads models/model.pkl as a workflow artifact
 
-Runs on every push to main
+docker.yml
+- Downloads the model artifact
+- Builds and tests the Docker image
+- Pushes the image to GitHub Container Registry (GHCR)
+- Optionally performs a smoke test
 
-Installs lightweight dependencies for Linux
+Deployment on Render
+Configuration:
+| Setting           | Value    |
+| ----------------- | -------- |
+| Runtime           | Docker   |
+| Branch            | main     |
+| Port              | 8000     |
+| Health Check Path | /healthz |
+| Auto Deploy       | Enabled  |
 
-Trains on a small sample dataset (data/madrid_sample.csv)
+Endpoints:
+- /healthz – service health check
+-/docs – Swagger UI for API documentation
+- /predict – prediction endpoint
+Live deployment: https://madrid-house-price-api.onrender.com
 
-Uploads models/model.pkl as a GitHub Actions artifact
-
-🐳 docker.yml
-
-Downloads the model artifact
-
-Builds the FastAPI Docker image
-
-Pushes image to GitHub Container Registry (GHCR)
-
-Optionally runs a smoke test
-
-☁️ Deployment (Render)
-
-Render Settings
-
-Setting	Value
-Runtime	Docker
-Branch	main
-Port	8000
-Health Check Path	/healthz
-Auto Deploy	Enabled
-
-Live Endpoint
-
-https://madrid-house-price-api.onrender.com
-
-
-/healthz → Service health
-
-/docs → Swagger UI
-
-/predict → Predict prices
-
-🧰 Tools & Technologies
-Category	Tools
-Data & Model	pandas, scikit-learn, joblib
-Tracking	MLflow
-API	FastAPI, Uvicorn
-CI/CD	GitHub Actions, Docker, GHCR
-Deployment	Render.com
-
+Tools and Technologies
+| Category            | Tools                        |
+| ------------------- | ---------------------------- |
+| Data & Modeling     | pandas, scikit-learn, joblib |
+| Experiment Tracking | MLflow                       |
+| API                 | FastAPI, Uvicorn             |
+| CI/CD               | GitHub Actions, Docker, GHCR |
+| Deployment          | Render.com                   |
