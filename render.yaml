@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: madrid-house-price-api
+    env: docker
+    plan: free
+    branch: main
+    region: frankfurt          # change to your nearest region if needed (e.g., oregon)
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: "8000"

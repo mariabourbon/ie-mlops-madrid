@@ -1,0 +1,10 @@
+# runtime-only deps for serving the API (no training libs)
+fastapi==0.110.0
+uvicorn==0.27.1
+numpy==1.26.4
+pandas==2.2.2
+scikit-learn==1.4.2
+joblib==1.4.2
+pydantic==2.6.4
+typing_extensions==4.12.2
+
