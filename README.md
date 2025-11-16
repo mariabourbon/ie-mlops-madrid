@@ -1,8 +1,8 @@
-Madrid House Price Prediction — MLOps Project
+### Madrid House Price Prediction — MLOps Project
 
 This project develops an end-to-end MLOps pipeline for predicting house prices in Madrid. It includes data preprocessing, model training and evaluation, API serving with FastAPI, containerization using Docker, and automated deployment through GitHub Actions and Render.
 
-Project Overview
+**Project Overview**
 1. Data and Training
 
 The pipeline processes a housing dataset and trains a RandomForestRegressor model. Model metrics and parameters are logged using MLflow for experiment tracking.
@@ -23,27 +23,21 @@ GitHub Actions workflows automate model training, artifact management, Docker im
 
 The project is deployed on Render, which automatically builds and runs the Docker container when updates are pushed to the main branch.
 
-Repository Structure
-madrid_mlops_project/
-├── app/
-│   └── app.py                  # FastAPI app for serving predictions
-├── data/
-│   └── madrid_sample.csv       # Sample dataset for CI testing
-├── models/
-│   └── model.pkl               # Trained model artifact
-├── src/
-│   ├── data_cleaning.py        # Data preprocessing script
-│   └── train_model.py          # Model training and MLflow logging
-├── .github/workflows/
-│   ├── train.yml               # Training workflow
-│   └── docker.yml              # Docker build and deploy workflow
-├── Dockerfile                  # Container build instructions
-├── render.yaml                 # Render deployment configuration
-├── requirements-train-ci.txt   # Training dependencies (for CI)
-├── requirements-api.txt        # Runtime dependencies (for FastAPI)
-└── README.md                   # Project documentation
+**Repository Structure**
+- `app/app.py` – FastAPI app for serving predictions  
+- `data/madrid_sample.csv` – Sample dataset for CI testing  
+- `models/model.pkl` – Trained model artifact  
+- `src/data_cleaning.py` – Data preprocessing  
+- `src/train_model.py` – Model training and MLflow logging  
+- `.github/workflows/train.yml` – Training workflow  
+- `.github/workflows/docker.yml` – Docker build and deploy workflow  
+- `Dockerfile` – Container build instructions  
+- `render.yaml` – Render deployment configuration  
+- `requirements-train-ci.txt` – Training dependencies  
+- `requirements-api.txt` – Runtime dependencies for FastAPI  
+- `README.md` – Project documentation
 
-Local Setup
+**Local Setup**
 1. Create and activate a virtual environment
   python -m venv venv
 venv\Scripts\activate        # Windows
@@ -66,7 +60,7 @@ Then open http://127.0.0.1:8000/docs to test the endpoints.
 
 Example Prediction
 
-Endpoint: POST /predict
+**Endpoint: POST /predict**
 Request body:
 [
   {
@@ -87,7 +81,7 @@ Response:
   "price": [63000.42]
 }
 
-CI/CD Workflows
+**CI/CD Workflows**
 train.yml
 - Runs on every push to the main branch
 - Installs lightweight dependencies
@@ -100,7 +94,7 @@ docker.yml
 - Pushes the image to GitHub Container Registry (GHCR)
 - Optionally performs a smoke test
 
-Deployment on Render
+**Deployment on Render**
 Configuration:
 | Setting           | Value    |
 | ----------------- | -------- |
@@ -110,13 +104,13 @@ Configuration:
 | Health Check Path | /healthz |
 | Auto Deploy       | Enabled  |
 
-Endpoints:
+**Endpoints:**
 - /healthz – service health check
 -/docs – Swagger UI for API documentation
 - /predict – prediction endpoint
 Live deployment: https://madrid-house-price-api.onrender.com
 
-Tools and Technologies
+**Tools and Technologies**
 | Category            | Tools                        |
 | ------------------- | ---------------------------- |
 | Data & Modeling     | pandas, scikit-learn, joblib |
